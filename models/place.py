@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""This is the place class"""
+"""This module defines the Place class representing a place listing
+    and related functions for managing place rentals.
+"""
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, ForeignKey, Float, Table
 from sqlalchemy.orm import relationship
@@ -15,19 +17,23 @@ place_amenity = Table('place_amenity', Base.metadata,
 
 
 class Place(BaseModel, Base):
-    """This is the class for Place
+    """Represents a place listing.
+
     Attributes:
-        city_id: city id
-        user_id: user id
-        name: name input
-        description: string of description
-        number_rooms: number of room in int
-        number_bathrooms: number of bathrooms in int
-        max_guest: maximum guest in int
-        price_by_night:: pice for a staying in int
-        latitude: latitude in flaot
-        longitude: longitude in float
-        amenity_ids: list of Amenity ids
+        city_id (str): The ID of the associated city.
+        user_id (str): The ID of the user who owns the place.
+        name (str): Name of the place.
+        description (str, optional): Description of the place.
+        number_rooms (int): Number of rooms in the place.
+        number_bathrooms (int): Number of bathrooms in the place.
+        max_guest (int): Maximum number of guests allowed.
+        price_by_night (int): Price for a night's stay.
+        latitude (float, optional): Geographical latitude of the place.
+        longitude (float, optional): Geographical longitude of the place.
+        amenity_ids (list): List of Amenity IDs associated with the place.
+        reviews (list[Review]): List of reviews for this place.
+        amenities (list[Amenity]): List of amenities associated with the
+                                place.
     """
     __tablename__ = 'places'
     if getenv("HBNB_TYPE_STORAGE") == 'db':

@@ -9,12 +9,17 @@ from os import getenv
 
 
 class User(BaseModel, Base):
-    """This is the class for user
+    """Represents a user in the application.
+
     Attributes:
-        email: email address
-        password: password for you login
-        first_name: first name
-        last_name: last name
+        email (str): Email address of the user. (Required)
+        password (str): Password of the user. (Required)
+        first_name (str, optional): First name of the user.
+        last_name (str, optional): Last name of the user.
+        reviews (list[Review], read-only): List of Review instances by the
+                                        user.
+        places (list[Place], read-only): List of Place instances owned by the
+                                        user.
     """
     __tablename__ = 'users'
     if getenv("HBNB_TYPE_STORAGE") == 'db':

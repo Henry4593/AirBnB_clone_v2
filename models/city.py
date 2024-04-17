@@ -11,7 +11,14 @@ from os import getenv
 
 
 class City(BaseModel, Base):
-    """ The city class, contains state ID and name """
+    """Represents a city in the application.
+
+    Attributes:
+        name (str): The name of the city. (Required)
+        state_id (str): The ID of the associated state. (Required)
+        places (list[Place], read-only): List of Place instances belonging
+        to the city.
+    """
     __tablename__ = "cities"
     if getenv("HBNB_TYPE_STORAGE") == 'db':
         name = Column(String(128), nullable=False)

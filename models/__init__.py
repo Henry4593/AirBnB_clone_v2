@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-"""This module instantiates an object of class FileStorage"""
+"""Chooses and instantiates a storage engine based on environment.
+If 'HBNB_TYPE_STORAGE' is set to 'db', uses a database storage engine.
+Otherwise, defaults to a file system storage engine.
+"""
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 from models.user import User

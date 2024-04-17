@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" """
+"""Unit tests for the Amenity model."""
 from models.base_model import BaseModel
 import unittest
 import datetime
@@ -9,10 +9,14 @@ import os
 
 
 class test_basemodel(unittest.TestCase):
-    """ """
+    """
+    Test suite for the Amenity model, inheriting from the base model tests.
+    """
 
     def __init__(self, *args, **kwargs):
-        """ """
+        """Initialize the test class instance, calling the base class
+        constructor and setting up test-specific attributes.
+        """
         super().__init__(*args, **kwargs)
         self.name = 'BaseModel'
         self.value = BaseModel

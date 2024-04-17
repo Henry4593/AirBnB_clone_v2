@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-"""This is the file storage class for AirBnB"""
+"""File Storage Management System
+Provides an abstraction layer for storing and retrieving application objects.
+Uses JSON format to serialize and deserialize data to a file.
+"""
 import models
 import json
 from models.base_model import BaseModel
@@ -12,19 +15,24 @@ from models.review import Review
 
 
 class FileStorage:
-    """This class serializes instances to a JSON file and
-    deserializes JSON file to instances
+    """Facilitates object persistence using a JSON file.
     Attributes:
-        __file_path: path to the JSON file
-        __objects: objects will be stored
+        __file_path (str): The path to the JSON file used for storage.
+        __objects (dict): A dictionary holding all instantiated objects.
     """
     __file_path = "file.json"
     __objects = {}
 
     def all(self, cls=None):
-        """returns a dictionary
-        Return:
-            returns a dictionary of __object
+        """Retrieves all or specific objects from storage.
+        Args:
+            cls (class, optional): The class of objects to retrieve.
+                If None, returns all objects. Defaults to None.
+
+        Returns:
+            dict: A dictionary containing the retrieved objects.
+                If a class is specified, only objects of that class are
+                returned.
         """
         if cls is None:
             return self.__objects
@@ -37,7 +45,7 @@ class FileStorage:
             return my_dict
 
     def new(self, obj):
-        """sets __object to given obj
+        """Schedules an object to be added to the storage.
         Args:
             obj: given object
         """
@@ -46,8 +54,7 @@ class FileStorage:
             self.__objects[key] = obj
 
     def save(self):
-        """serialize the file path to JSON file path
-        """
+        """Serializes all objects in storage to the JSON file."""
         my_dict = {}
         for key, value in self.__objects.items():
             my_dict[key] = value.to_dict()
@@ -55,7 +62,8 @@ class FileStorage:
             json.dump(my_dict, f)
 
     def reload(self):
-        """serialize the file path to JSON file path
+        """Loads objects from the JSON file back into storage
+        (if it exists).
         """
         try:
             with open(self.__file_path, 'r', encoding="UTF-8") as f:
@@ -66,11 +74,11 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
-        """ delete obj from __objects """
+        """Schedules an object to be removed from storage (if it exists)."""
         if obj:
             del self.__objects[obj.__class__.__name__ + '.' + obj.id]
             self.save()
 
     def close(self):
-        """Method for deserializing"""
+        """Reloads objects from the JSON file on program termination."""
         self.reload()

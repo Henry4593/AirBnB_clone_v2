@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-"""This is the console for AirBnB"""
+"""HBNB Command Interpreter for the HolbertonBnB application
+Provides an interactive command-line interface for managing
+HolbertonBnB application objects.
+"""
 import cmd
 from models import storage
 from datetime import datetime
@@ -14,29 +17,32 @@ from shlex import split
 
 
 class HBNBCommand(cmd.Cmd):
-    """this class is entry point of the command interpreter
+    """Interactive shell for interacting with HolbertonBnB application objects.
+    Provides functionalities to create, display, update, and delete
+    User, State, City, Amenity, Place, and Review objects.
     """
     prompt = "(hbnb) "
     all_classes = {"BaseModel", "User", "State", "City",
                    "Amenity", "Place", "Review"}
 
     def emptyline(self):
-        """Ignores empty spaces"""
+        """Ignores empty lines entered by the user."""
         pass
 
     def do_quit(self, line):
-        """Quit command to exit the program"""
+        """Exits the HBNB command interpreter."""
         return True
 
     def do_EOF(self, line):
-        """Quit command to exit the program at end of file"""
+        """Exits the HBNB command interpreter upon receiving EOF signal."""
         return True
 
     def do_create(self, line):
-        """Creates a new instance of BaseModel, saves it
-        Exceptions:
-            SyntaxError: when there is no args given
-            NameError: when there is no object taht has the name
+        """Creates a new object instance of the specified class.
+        Usage: create <class name> [<key>=<value> ...]
+
+        - class name: The class of the object to create (e.g., User, State)
+        - key=value: Optional key-value pairs to set object attributes
         """
         try:
             if not line:
@@ -81,12 +87,11 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_show(self, line):
-        """Prints the string representation of an instance
-        Exceptions:
-            SyntaxError: when there is no args given
-            NameError: when there is no object taht has the name
-            IndexError: when there is no id given
-            KeyError: when there is no valid id given
+        """Displays the string representation of an object instance.
+        Usage: show <class name> <id>
+
+        - class name: The class of the object to display (e.g., User, State)
+        - id: The unique identifier of the object instance
         """
         try:
             if not line:
@@ -112,12 +117,11 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_destroy(self, line):
-        """Deletes an instance based on the class name and id
-        Exceptions:
-            SyntaxError: when there is no args given
-            NameError: when there is no object taht has the name
-            IndexError: when there is no id given
-            KeyError: when there is no valid id given
+        """Deletes an object instance based on its class and ID.
+        Usage: destroy <class name> <id>
+
+        - class name: The class of the object to delete (e.g., User, State)
+        - id: The unique identifier of the object instance
         """
         try:
             if not line:
@@ -144,7 +148,14 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_update(self, line):
-        """Updates an instance by adding or updating attribute
+        """Updates an object instance by adding or modifying attributes.
+
+        Usage: update <class name> <id> <attribute name> <value>
+
+        - class name: The class of the object to update (e.g., User, State)
+        - id: The unique identifier of the object instance
+        - attribute name: The name of the attribute to update
+        - value: The new value for the specified attribute
         Exceptions:
             SyntaxError: when there is no args given
             NameError: when there is no object taht has the name
@@ -189,7 +200,9 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
 
     def count(self, line):
-        """count the number of instances of a class
+        """Counts the number of instances of a specific class.
+        Usage: count <class name>
+        - class name: The class of objects to count
         """
         counter = 0
         try:
@@ -206,11 +219,15 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def strip_clean(self, args):
-        """strips the argument and return a string of command
+        """Parses arguments with potential dictionary formats.
+        Internal helper function used for parsing arguments with
+        complex structures like dictionaries.
+
         Args:
-            args: input list of args
-        Return:
-            returns string of argumetns
+            args (list): A list of arguments to be parsed.
+
+        Returns:
+            list: A cleaned list of arguments or a single string result.
         """
         new_list = []
         new_list.append(args[0])
@@ -229,8 +246,14 @@ class HBNBCommand(cmd.Cmd):
         return " ".join(i for i in new_list)
 
     def default(self, line):
-        """retrieve all instances of a class and
-        retrieve the number of instances
+        """Handles method calls using dot notation and dispatches to specific
+        methods.
+
+        Internal helper function used for routing method calls with dot
+        notation (e.g., User.all()).
+
+        Args:
+            line (str): The command line entered by the user.
         """
         my_list = line.split('.')
         if len(my_list) >= 2:

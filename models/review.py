@@ -1,5 +1,10 @@
 #!/usr/bin/python3
-""" Review class definitiont """
+"""This module defines the `Review` class, which represents a user review for
+a place in the application.
+
+The `Review` class inherits from the `BaseModel` class and provides data
+validation for review data.
+"""
 
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
@@ -9,7 +14,13 @@ from os import getenv
 
 
 class Review(BaseModel, Base):
-    """ The review class """
+    """Represents a user review for a place in the application.
+
+    Attributes:
+        text (str): The content of the review.
+        place_id (str): The ID of the associated place.
+        user_id (str): The ID of the user who wrote the review.
+    """
 
     __tablename__ = 'reviews'
     if getenv('HBNB_TYPE_STORAGE') == 'db':

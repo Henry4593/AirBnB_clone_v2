@@ -1,5 +1,9 @@
 #!/usr/bin/python3
-"""DBStorage class for AirBnB"""
+"""Database Storage Management for AirBnB
+Connects to the MySQL database and provides functions to interact
+with the data using SQLAlchemy. This class employs a single database
+session for efficiency and manages the connection to the engine.
+"""
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session, scoped_session, relationship
 from os import getenv
@@ -13,12 +17,18 @@ from models.review import Review
 
 
 class DBStorage():
-    """DBStorage class"""
+    """Facilitates interactions with the MySQL database.
+    Attributes:
+        __engine (sqlalchemy.engine.Engine): The underlying connection to the
+                        database.
+        __session (sqlalchemy.orm.session.Session): The current active database
+                        session.
+    """
     __engine = None
     __session = None
 
     def __init__(self):
-        """Initial method"""
+        """Initializes the connection to the MySQL database."""
         mysql_user = getenv('HBNB_MYSQL_USER')
         mysql_pwd = getenv('HBNB_MYSQL_PWD')
         mysql_host = getenv('HBNB_MYSQL_HOST')
@@ -36,7 +46,14 @@ class DBStorage():
         self.__session = Session()
 
     def all(self, cls=None):
-        """show all data
+        """Retrieves all or specific objects from the database.
+        Args:
+            cls (class, optional): The class of objects to retrieve.
+                If None, returns all classes. Defaults to None.
+
+        Returns:
+            dict: A dictionary containing the retrieved objects in the format
+                <class name>.<obj id> = obj.
         """
         if cls:
             objs = self.__session.query(cls).all()
@@ -57,33 +74,31 @@ class DBStorage():
         return new_dict
 
     def new(self, obj):
-        """Add the object in the databse"""
+        """Schedules an object to be added to the database session."""
         if obj:
             self.__session.add(obj)
 
     def save(self):
-        """Commit all changes of the current
-        database session"""
+        """Commits all pending changes to the database."""
         self.__session.commit()
 
     def delete(self, obj=None):
-        """Delete from the current database"""
+        """Schedules an object to be removed from the database session.
+        Args:
+            obj (object, optional): The object to be deleted. Defaults to None
+            (no deletion).
+        """
         if obj:
             self.__session.delete(obj)
 
     def close(self):
-        """
-        Closes Session
-        """
+        """Terminates the current database session."""
         self.__session.close()
 
     def reload(self):
-        """ Create database in Alchemy"""
+        """Creates all database tables (if needed) and starts a new session."""
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(Session)
         self.__session = Session
 
-    def close(self):
-        """Clise session"""
-        self.__session.close()
