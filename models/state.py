@@ -1,7 +1,5 @@
-#!/usr/bin/python3
-"""State Module for HBNB project
-This module defines the `State` class representing a state in the application.
-"""
+ #!/usr/bin/python3
+""" State Module for HBNB project """
 import models
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String
@@ -11,12 +9,9 @@ from os import getenv
 
 
 class State(BaseModel, Base):
-    """Represents a state in the application.
-
+    """This is the class for State
     Attributes:
-        name (str): The name of the state. (Required)
-        cities (list[City], read-only): List of City instances belonging
-        to the state.
+        name: input name
     """
     __tablename__ = "states"
 
@@ -30,10 +25,7 @@ class State(BaseModel, Base):
 
         @property
         def cities(self):
-            """Retrieves the list of City instances belonging to the state.
-
-            Returns:
-                list[City]: A list of City instances.
+            """ Returns the list of City
             """
             the_cities = []
             for c in models.storage.all(City).values():

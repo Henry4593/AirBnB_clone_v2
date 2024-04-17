@@ -1,26 +1,20 @@
 #!/usr/bin/python3
-"""User Module for HBNB project
-This module defines the `User` class representing a user in the application.
-"""
+"""This is the user class"""
 from models.base_model import Base, BaseModel
 from sqlalchemy import Column, Integer, String
+import sqlalchemy
 from sqlalchemy.orm import backref, relationship
 from os import getenv
 
 
 
 class User(BaseModel, Base):
-    """Represents a user in the application.
-
+    """This is the class for user
     Attributes:
-        email (str): Email address of the user. (Required)
-        password (str): Password of the user. (Required)
-        first_name (str, optional): First name of the user.
-        last_name (str, optional): Last name of the user.
-        reviews (list[Review], read-only): List of Review instances by the
-                                        user.
-        places (list[Place], read-only): List of Place instances owned by the
-                                        user.
+        email: email address
+        password: password for you login
+        first_name: first name
+        last_name: last name
     """
     __tablename__ = 'users'
     if getenv("HBNB_TYPE_STORAGE") == 'db':
