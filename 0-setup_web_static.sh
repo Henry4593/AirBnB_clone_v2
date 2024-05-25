@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# script that sets up web servers for the deployment of web_static
+# Prepares the system for web application deployment
 sudo apt-get update
 sudo apt-get -y install nginx
 sudo ufw allow 'Nginx HTTP'
@@ -22,7 +22,7 @@ sudo ln -s -f /data/web_static/releases/test/ /data/web_static/current
 
 sudo chown -R ubuntu:ubuntu /data/
 
-has_location_block(){
+function has_location_block(){
     grep -q 'location /hbnb_static {' /etc/nginx/sites-enabled/default
 }
 
