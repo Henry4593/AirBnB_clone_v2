@@ -19,12 +19,16 @@ class City(BaseModel, Base):
         places (list[Place], read-only): List of Place instances belonging
         to the city.
     """
-    __tablename__ = "cities"
     if getenv("HBNB_TYPE_STORAGE") == 'db':
-        name = Column(String(128), nullable=False)
+        __tablename__ = "cities"
         state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
-#        places = relationship("place", backref = "cities", cascade="delete")
+        name = Column(String(128), nullable=False)
+        places = relationship("Place", backref="cities", cascade="delete")
 
     else:
         state_id = ""
         name = ""
+
+    def __init__(self, *args, **kwargs):
+        """initializes city"""
+        super().__init__(*args, **kwargs)

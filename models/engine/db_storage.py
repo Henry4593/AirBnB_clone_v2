@@ -93,7 +93,7 @@ class DBStorage():
 
     def close(self):
         """Terminates the current database session."""
-        self.__session.close()
+        self.__session.remove()
 
     def reload(self):
         """Creates all database tables (if needed) and starts a new session."""

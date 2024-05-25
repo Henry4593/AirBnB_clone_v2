@@ -7,7 +7,6 @@ from sqlalchemy.orm import backref, relationship
 from os import getenv
 
 
-
 class User(BaseModel, Base):
     """Represents a user in the application.
 
@@ -21,20 +20,23 @@ class User(BaseModel, Base):
         places (list[Place], read-only): List of Place instances owned by the
                                         user.
     """
-    __tablename__ = 'users'
     if getenv("HBNB_TYPE_STORAGE") == 'db':
+        __tablename__ = 'users'
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
         first_name = Column(String(128), nullable=True)
         last_name = Column(String(128), nullable=True)
-        reviews = relationship("Review", backref="user",
-                           cascade="all, delete, delete-orphan")
-
         places = relationship("Place", backref="user",
                               cascade="all, delete, delete-orphan")
+        reviews = relationship("Review", backref="user",
+                               cascade="all, delete, delete-orphan")
 
     else:
         email = ""
         password = ""
         first_name = ""
         last_name = ""
+
+    def __init__(self, *args, **kwargs):
+        """initializes user"""
+        super().__init__(*args, **kwargs)

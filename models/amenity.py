@@ -15,9 +15,12 @@ class Amenity(BaseModel, Base):
         place_amenities (list[Place], read-only): List of Place instances
         associated with the amenity. (Many-to-Many)
     """
-    __tablename__ = "amenities"
     if getenv("HBNB_TYPE_STORAGE") == 'db':
+        __tablename__ = "amenities"
         name = Column(String(128), nullable=False)
-#        place_amenities = relationship("Place", secondary="place_amenity",y                                      viewonly=False)
     else:
         name = ""
+
+    def __init__(self, *args, **kwargs):
+        """Initializes Amenity"""
+        super().__init__(*args, **kwargs)

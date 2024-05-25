@@ -3,17 +3,21 @@
     and related functions for managing place rentals.
 """
 from models.base_model import BaseModel, Base
+import models
 from sqlalchemy import Column, Integer, String, ForeignKey, Float, Table
 from sqlalchemy.orm import relationship
 from os import getenv
 
-
-place_amenity = Table('place_amenity', Base.metadata,
-                      Column('place_id', String(60), ForeignKey('places.id'),
-                             primary_key=True, nullable=False),
-                      Column('amenity_id', String(60),
-                             ForeignKey('amenities.id'),
-                             primary_key=True, nullable=False))
+if getenv('HBNB_TYPE_STORAGE') == 'db':
+    place_amenity = Table('place_amenity', Base.metadata,
+                          Column('place_id', String(60),
+                                 ForeignKey('places.id', onupdate='CASCADE',
+                                            ondelete='CASCADE'),
+                                 primary_key=True, nullable=False),
+                          Column('amenity_id', String(60),
+                                 ForeignKey('amenities.id', onupdate='CASCADE',
+                                            ondelete='CASCADE'),
+                                 primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -35,8 +39,8 @@ class Place(BaseModel, Base):
         amenities (list[Amenity]): List of amenities associated with the
                                 place.
     """
-    __tablename__ = 'places'
     if getenv("HBNB_TYPE_STORAGE") == 'db':
+        __tablename__ = 'places'
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)
@@ -47,8 +51,7 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
-        amenity_ids = []
-        reviews = relationship("Review", backref="Place",
+        reviews = relationship("Review", backref="place",
                                cascade="all, delete, delete-orphan")
 
         amenities = relationship("Amenity", secondary=place_amenity,
@@ -66,23 +69,27 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenity_ids = []
 
+    def __init__(self, *args, **kwargs):
+        """initializes Place"""
+        super().__init__(*args, **kwargs)
+
+    if getenv("HBNB_TYPE_STORAGE") != 'db':
         @property
         def reviews(self):
+            """getter attribute returns the list of Review instances"""
+            from models.review import Review
             review_list = []
-            for value in models.storage.all(Review).values():
-                if value.place_id == self.id:
-                    review_list.append(value)
+            for review in models.storage.all(Review).values():
+                if review.place_id == self.id:
+                    review_list.append(review)
                 return review_list
 
         @property
         def amenities(self):
+            """getter attribute returns the list of Amenity instances"""
+            from models.amenity import Amenity
             amenity_list = []
-            for value in models.storage.all(Amenity).values():
-                if value.place_amenity.place_id == self.id:
-                    amenity_list.append(value)
+            for amenity in models.storage.all(Amenity).values():
+                if amenity.place_amenity.place_id == self.id:
+                    amenity_list.append(amenity)
                 return amenity_list
-
-        @amenities.setter
-        def amenities(self, obj=None):
-            if type(obj) == Amenity:
-                self.amenity_ids.append(obj.id)

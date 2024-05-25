@@ -21,14 +21,17 @@ class Review(BaseModel, Base):
         place_id (str): The ID of the associated place.
         user_id (str): The ID of the user who wrote the review.
     """
-
-    __tablename__ = 'reviews'
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        text = Column(String(1024), nullable=False)
+        __tablename__ = 'reviews'
         place_id = Column(String(60), ForeignKey('places.id'), nullable=True)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=True)
+        text = Column(String(1024), nullable=False)
 
     else:
         place_id = ""
         user_id = ""
         text = ""
+
+    def __init__(self, *args, **kwargs):
+        """initializes Review"""
+        super().__init__(*args, **kwargs)
