@@ -14,7 +14,7 @@ from fabric.api import *
 
 def do_pack():
     """Creates a compressed archive (tar.gz) of the 'web_static' directory.
-    The archive filename incorporates a timestamp for easy identification 
+    The archive filename incorporates a timestamp for easy identification
     and is placed in a subdirectory named 'versions'.
 
     **Returns:**
