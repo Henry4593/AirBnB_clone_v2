@@ -10,7 +10,7 @@
 
 from fabric.api import put, run, env
 from os.path import exists
-env.hosts = ['web-01.aciel.tech', 'web-02.aciel.tech']
+env.hosts = ['54.237.217.113', '100.26.171.135']
 
 
 def do_deploy(archive_path):
@@ -30,5 +30,5 @@ def do_deploy(archive_path):
         run('rm -rf /data/web_static/current')
         run('ln -s {}{}/ /data/web_static/current'.format(path, file_no_ext))
         return True
-    except:
+    except Exception:
         return False
