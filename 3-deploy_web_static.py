@@ -14,6 +14,7 @@ from fabric.api import env, local, put, run, runs_once
 
 env.hosts = ['54.237.217.113', '100.26.171.135']
 
+
 @runs_once
 def do_pack():
     """generates a tgz archive"""
